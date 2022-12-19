@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StarWarsProject.Models
 {
@@ -6,8 +8,8 @@ namespace StarWarsProject.Models
     {
         [Key]
         public int SpeciesId { get; set; }
+        [Required]
         public string SpeciesName { get; set;}
 
-        public ICollection<Characters> Characters { get; set; }
     }
 }
