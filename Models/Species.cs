@@ -11,5 +11,9 @@ namespace StarWarsProject.Models
         [Required]
         public string SpeciesName { get; set;}
 
+        //Relation One-Many
+        [ForeignKey("CharacterId")]
+        public int CharacterId { get; set; }
+        public ICollection<Character> Character { get; set;}
     }
 }

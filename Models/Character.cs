@@ -1,24 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace StarWarsProject.Models
 {
-    public class Characters
+    public class Character
     {
         [Key]
         public int CharacterId { get; set; }
         [Required]
         public string CharacterName { get; set; }
 
-        [Required]
-        //Foreign key Species
-        public int SpeciesId { get; set; }
-        [Required]
         // Species information
+        [Required]
+        [ForeignKey("SpeciesId")]
+        public int SpeciesId { get; set; }
+        [JsonIgnore]
         public Species Species { get; set; }
 
-        [Required]
         //Character Stats
-        public int CharacterStatsId { get; set; }
+        [Required]
+        [ForeignKey("CharacterStatsId")]
+        public int CharecterStatsId { get; set; }
+        [JsonIgnore]
+        public CharacterStats CharacterStats { get; set; }
     }
 }

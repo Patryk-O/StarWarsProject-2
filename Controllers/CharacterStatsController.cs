@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StarWarsProject.Data;
 using StarWarsProject.Models;
+using StarWarsProject.ModelsDto;
 
 namespace StarWarsProject.Controllers
 {
@@ -15,17 +17,20 @@ namespace StarWarsProject.Controllers
     public class CharacterStatsController : ControllerBase
     {
         private readonly StarWarsProjectContext _context;
+        private readonly IMapper _mapper;
 
-        public CharacterStatsController(StarWarsProjectContext context)
+        public CharacterStatsController(StarWarsProjectContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/CharacterStats
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CharacterStats>>> GetCharacterStats()
         {
-            return await _context.CharacterStats.ToListAsync();
+            var Stats = await _context.CharacterStats.ToListAsync();
+            return Ok(Stats.Select(p => _mapper.Map<CharacterStatsDto>(p)));
         }
 
         // GET: api/CharacterStats/5
@@ -76,8 +81,15 @@ namespace StarWarsProject.Controllers
         // POST: api/CharacterStats
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CharacterStats>> PostCharacterStats(CharacterStats characterStats)
+        public async Task<ActionResult<CharacterStatsDto>> PostCharacterStats(CharacterStatsDto characterStatsdto)
         {
+            var Character = await _context.Characters.FindAsync(characterStatsdto.CharacterId);
+
+            if (Character == null)
+                return NotFound();
+
+            var characterStats = _mapper.Map<CharacterStats>(characterStatsdto); 
+            
             _context.CharacterStats.Add(characterStats);
             await _context.SaveChangesAsync();
 

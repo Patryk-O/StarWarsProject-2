@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StarWarsProject.Data;
 using StarWarsProject.Models;
+using StarWarsProject.ModelsDto;
 
 namespace StarWarsProject.Controllers
 {
@@ -15,17 +17,20 @@ namespace StarWarsProject.Controllers
     public class SpeciesController : ControllerBase
     {
         private readonly StarWarsProjectContext _context;
+        private readonly IMapper _mapper;
 
-        public SpeciesController(StarWarsProjectContext context)
+        public SpeciesController(StarWarsProjectContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Species
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Species>>> GetSpecies()
+        public async Task<ActionResult<IEnumerable<SpeciesDto>>> GetSpecies()
         {
-            return await _context.Species.ToListAsync();
+            var SpeciesDto = await _context.Species.ToListAsync();
+            return Ok(SpeciesDto.Select(p => _mapper.Map<SpeciesDto>(p)));
         }
 
         // GET: api/Species/5
@@ -76,8 +81,9 @@ namespace StarWarsProject.Controllers
         // POST: api/Species
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Species>> PostSpecies(Species species)
+        public async Task<ActionResult<SpeciesDto>> PostSpecies(SpeciesDto speciesdto)
         {
+            var species = _mapper.Map<Species>(speciesdto);
             _context.Species.Add(species);
             await _context.SaveChangesAsync();
 
