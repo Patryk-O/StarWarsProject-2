@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarWarsProject.DTOModels;
 using StarWarsProject.Models;
 using StarWarsProject.ModelsDto;
 
@@ -13,6 +14,19 @@ namespace StarWarsProject
 
             CreateMap<CharacterStats, CharacterStatsDto>();
             CreateMap<CharacterStatsDto, CharacterStats>();
+
+            CreateMap<Character, CharacterDto>();
+            CreateMap<CharacterDto, Character>();
+
+            CreateMap<Species, SpeciesPostDto>();
+            CreateMap<SpeciesPostDto, Species>();
+
+            CreateMap<CharacterStats, CharacterStatsPostDto>();
+            CreateMap<CharacterStatsPostDto, CharacterStats>();
+
+            CreateMap<Character, CharacterPostDto>();
+            CreateMap<CharacterPostDto, Character>();
+
         }
     }
 }

@@ -11,8 +11,8 @@ using StarWarsProject.Data;
 namespace StarWarsProject.Migrations
 {
     [DbContext(typeof(StarWarsProjectContext))]
-    [Migration("20221219115157_Initial")]
-    partial class Initial
+    [Migration("20221220192933_initial#3")]
+    partial class initial3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,22 @@ namespace StarWarsProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("StarWarsProject.Models.Characters", b =>
+            modelBuilder.Entity("CharacterWeapon", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WeaponsWeaponId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharacterId", "WeaponsWeaponId");
+
+                    b.HasIndex("WeaponsWeaponId");
+
+                    b.ToTable("CharacterWeapon");
+                });
+
+            modelBuilder.Entity("StarWarsProject.Models.Character", b =>
                 {
                     b.Property<int>("CharacterId")
                         .ValueGeneratedOnAdd()
@@ -34,9 +49,6 @@ namespace StarWarsProject.Migrations
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CharacterStatsId")
-                        .HasColumnType("int");
 
                     b.Property<int>("SpeciesId")
                         .HasColumnType("int");
@@ -56,6 +68,9 @@ namespace StarWarsProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CharacterStatsId"), 1L, 1);
 
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Force")
                         .HasColumnType("int");
 
@@ -66,6 +81,9 @@ namespace StarWarsProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CharacterStatsId");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
 
                     b.ToTable("CharacterStats");
                 });
@@ -87,15 +105,72 @@ namespace StarWarsProject.Migrations
                     b.ToTable("Species");
                 });
 
-            modelBuilder.Entity("StarWarsProject.Models.Characters", b =>
+            modelBuilder.Entity("StarWarsProject.Models.Weapon", b =>
+                {
+                    b.Property<int>("WeaponId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WeaponId"), 1L, 1);
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("WeaponId");
+
+                    b.ToTable("Weapons");
+                });
+
+            modelBuilder.Entity("CharacterWeapon", b =>
+                {
+                    b.HasOne("StarWarsProject.Models.Character", null)
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StarWarsProject.Models.Weapon", null)
+                        .WithMany()
+                        .HasForeignKey("WeaponsWeaponId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StarWarsProject.Models.Character", b =>
                 {
                     b.HasOne("StarWarsProject.Models.Species", "Species")
-                        .WithMany()
+                        .WithMany("Character")
                         .HasForeignKey("SpeciesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Species");
+                });
+
+            modelBuilder.Entity("StarWarsProject.Models.CharacterStats", b =>
+                {
+                    b.HasOne("StarWarsProject.Models.Character", "Character")
+                        .WithOne("CharacterStats")
+                        .HasForeignKey("StarWarsProject.Models.CharacterStats", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("StarWarsProject.Models.Character", b =>
+                {
+                    b.Navigation("CharacterStats")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StarWarsProject.Models.Species", b =>
+                {
+                    b.Navigation("Character");
                 });
 #pragma warning restore 612, 618
         }

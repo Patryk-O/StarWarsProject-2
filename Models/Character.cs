@@ -13,17 +13,12 @@ namespace StarWarsProject.Models
         public string CharacterName { get; set; }
 
         // Species information
-        [Required]
-        [ForeignKey("SpeciesId")]
-        public int SpeciesId { get; set; }
-        [JsonIgnore]
         public Species Species { get; set; }
 
         //Character Stats
-        [Required]
-        [ForeignKey("CharacterStatsId")]
-        public int CharecterStatsId { get; set; }
-        [JsonIgnore]
         public CharacterStats CharacterStats { get; set; }
+
+        //Character Weapons
+        public ICollection<Weapon> Weapons { get; set; }
     }
 }

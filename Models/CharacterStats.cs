@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace StarWarsProject.Models
@@ -8,20 +9,18 @@ namespace StarWarsProject.Models
     {
         [Key]
         public int CharacterStatsId { get; set; }
-        [Required]
+        [NotNull]
         public int Health { get; set; } = Random.Shared.Next(1, 10) * 100;
-        [Required]
+        [NotNull]
         [Range(0, 100)]
         public int strength { get; set; } = Random.Shared.Next(1, 10) * 10;
-        [Required]
+        [NotNull]
         [Range(0, 100)]
         public int Force { get; set; } = Random.Shared.Next(1, 10) * 10;
 
         //Relation One-One
-        [ForeignKey("CharacterId")]
-        [Required]
-        public int CharacterId { get; set; }
         [JsonIgnore]
         public Character Character { get; set; }
+        public int CharacterId { get; set; }
     }
 }

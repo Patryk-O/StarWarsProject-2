@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,8 +13,7 @@ namespace StarWarsProject.Models
         public string SpeciesName { get; set;}
 
         //Relation One-Many
-        [ForeignKey("CharacterId")]
-        public int CharacterId { get; set; }
+        [JsonIgnore]
         public ICollection<Character> Character { get; set;}
     }
 }
