@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using StarWarsProject.Data;
 using StarWarsProject.DTOModels;
 using StarWarsProject.Models;
@@ -32,6 +33,44 @@ namespace StarWarsProject.Controllers
             return Ok(Character.Select(p => _mapper.Map<CharacterDto>(p)));
         }
 
+        [HttpGet("id")]
+        public async Task<ActionResult<CharacterDto>> GetCharacterById(int id)
+        {
+            var character = await _context.Characters
+                .Include(p => p.Species)
+                .Include(p => p.CharacterStats)
+                .FirstOrDefaultAsync(p => p.CharacterId == id);
+            if (character == null)
+                return NotFound();
+
+
+            return Ok(_mapper.Map<CharacterDto>(character));
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCharacter(int id, CharacterDto characterDto)
+        {
+            var previesCharacter = await _context.Characters.FindAsync(id);
+            if (previesCharacter == null)
+            {
+                return NotFound();
+            }
+
+            var character = _mapper.Map<Character>(characterDto);
+            previesCharacter.CharacterName = character.CharacterName;
+            previesCharacter.CharacterStats = character.CharacterStats;
+            previesCharacter.Species = character .Species;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
         [HttpPost]
         public async Task<ActionResult<IEnumerable<CharacterPostDto>>> PostCharacter(CharacterPostDto characterDto)
         {
@@ -54,5 +93,19 @@ namespace StarWarsProject.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCharacter(int id)
+        {
+            var character = await _context.Characters.FindAsync(id);
+            if (character == null)
+            {
+                return NotFound();
+            }
+
+            _context.Characters.Remove(character);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
