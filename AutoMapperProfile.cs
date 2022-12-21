@@ -27,6 +27,9 @@ namespace StarWarsProject
             CreateMap<Character, CharacterPostDto>();
             CreateMap<CharacterPostDto, Character>();
 
+            CreateMap<Weapon, WeaponDto>();
+            CreateMap<WeaponDto, Weapon>();
+
         }
     }
 }

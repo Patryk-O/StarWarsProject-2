@@ -11,8 +11,8 @@ using StarWarsProject.Data;
 namespace StarWarsProject.Migrations
 {
     [DbContext(typeof(StarWarsProjectContext))]
-    [Migration("20221220192933_initial#3")]
-    partial class initial3
+    [Migration("20221221192426_Initial#2")]
+    partial class Initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,12 +28,12 @@ namespace StarWarsProject.Migrations
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeaponsWeaponId")
+                    b.Property<int>("WeaponId")
                         .HasColumnType("int");
 
-                    b.HasKey("CharacterId", "WeaponsWeaponId");
+                    b.HasKey("CharacterId", "WeaponId");
 
-                    b.HasIndex("WeaponsWeaponId");
+                    b.HasIndex("WeaponId");
 
                     b.ToTable("CharacterWeapon");
                 });
@@ -135,7 +135,7 @@ namespace StarWarsProject.Migrations
 
                     b.HasOne("StarWarsProject.Models.Weapon", null)
                         .WithMany()
-                        .HasForeignKey("WeaponsWeaponId")
+                        .HasForeignKey("WeaponId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

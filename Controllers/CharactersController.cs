@@ -29,6 +29,7 @@ namespace StarWarsProject.Controllers
             var Character = await _context.Characters
                 .Include(c => c.Species)
                 .Include(c => c.CharacterStats)
+                .Include(c => c.Weapons)
                 .ToListAsync();
             return Ok(Character.Select(p => _mapper.Map<CharacterDto>(p)));
         }
@@ -39,6 +40,7 @@ namespace StarWarsProject.Controllers
             var character = await _context.Characters
                 .Include(p => p.Species)
                 .Include(p => p.CharacterStats)
+                .Include(p => p.Weapons)
                 .FirstOrDefaultAsync(p => p.CharacterId == id);
             if (character == null)
                 return NotFound();
@@ -59,6 +61,7 @@ namespace StarWarsProject.Controllers
             previesCharacter.CharacterName = character.CharacterName;
             previesCharacter.CharacterStats = character.CharacterStats;
             previesCharacter.Species = character .Species;
+            previesCharacter.Weapons = character.Weapons;
 
             try
             {
@@ -85,10 +88,33 @@ namespace StarWarsProject.Controllers
                 Species = species
             };
             character.CharacterStats = new CharacterStats { CharacterId = character.CharacterId };
+            character.Weapons = character.Weapons;
             _context.Characters.Add(character);
 
             await _context.SaveChangesAsync();
                         
+            return Ok();
+
+        }
+        [HttpPost("idCharacter,idWeapon")]
+        public async Task<ActionResult<IEnumerable<CharacterPostDto>>> PostWeapon(int idCharacter, int idWeapon)
+        {
+            //Check if the species exist
+            var Character = await _context.Characters
+                                    .Where(p => p.CharacterId == idCharacter)
+                                    .Include(p => p.Weapons)
+                                    .FirstOrDefaultAsync();
+            if (Character == null)
+                return NotFound("Character not found");
+
+            var Weapon = await _context.Weapons.FindAsync(idWeapon);
+            if (Weapon == null)
+                return NotFound("Weapon not found");
+
+            Character.Weapons.Add(Weapon);
+
+            await _context.SaveChangesAsync();
+
             return Ok();
 
         }

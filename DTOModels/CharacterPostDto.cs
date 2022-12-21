@@ -1,4 +1,6 @@
-﻿namespace StarWarsProject.DTOModels
+﻿using StarWarsProject.Models;
+
+namespace StarWarsProject.DTOModels
 {
     public class CharacterPostDto
     {
