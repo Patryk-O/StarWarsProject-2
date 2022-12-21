@@ -26,12 +26,12 @@ namespace StarWarsProject.Migrations
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeaponId")
+                    b.Property<int>("WeaponsWeaponId")
                         .HasColumnType("int");
 
-                    b.HasKey("CharacterId", "WeaponId");
+                    b.HasKey("CharacterId", "WeaponsWeaponId");
 
-                    b.HasIndex("WeaponId");
+                    b.HasIndex("WeaponsWeaponId");
 
                     b.ToTable("CharacterWeapon");
                 });
@@ -133,7 +133,7 @@ namespace StarWarsProject.Migrations
 
                     b.HasOne("StarWarsProject.Models.Weapon", null)
                         .WithMany()
-                        .HasForeignKey("WeaponId")
+                        .HasForeignKey("WeaponsWeaponId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

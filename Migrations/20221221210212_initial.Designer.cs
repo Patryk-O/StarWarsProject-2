@@ -11,7 +11,7 @@ using StarWarsProject.Data;
 namespace StarWarsProject.Migrations
 {
     [DbContext(typeof(StarWarsProjectContext))]
-    [Migration("20221220182603_initial")]
+    [Migration("20221221210212_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
