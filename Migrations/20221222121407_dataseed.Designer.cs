@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StarWarsProject.Data;
 
@@ -10,9 +11,10 @@ using StarWarsProject.Data;
 namespace StarWarsProject.Migrations
 {
     [DbContext(typeof(StarWarsProjectContext))]
-    partial class StarWarsProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20221222121407_dataseed")]
+    partial class dataseed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

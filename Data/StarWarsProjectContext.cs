@@ -15,12 +15,44 @@ namespace StarWarsProject.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Species.Add(new Species { SpeciesId = 1, SpeciesName = "human" });
-            Species.Add(new Species { SpeciesId = 2, SpeciesName = "Wookie" });
+            modelBuilder.Entity<Species>()
+                .HasData(
+                new Species
+                {
+                    SpeciesId = 1,
+                    SpeciesName = "Human",
+                },
+                new Species
+                {
+                    SpeciesId = 2,
+                    SpeciesName = "Wookie"
+                },
+                new Species
+                {
+                    SpeciesId= 3,
+                    SpeciesName = "Jawa"
+                });
 
-            Weapons.Add(new Weapon { WeaponId = 1, Damage = 30, Name = "Blaster" });
-            Weapons.Add(new Weapon { WeaponId = 1, Damage = 30, Name = "Blaster" });
-
+            modelBuilder.Entity<Weapon>()
+                .HasData(
+                new Weapon
+                {
+                    WeaponId = 1,
+                    Damage = 100,
+                    Name = "Ligthsaber"
+                },
+                new Weapon
+                {
+                    WeaponId = 2,
+                    Damage = 30,
+                    Name = "Blaster"
+                },
+                new Weapon
+                {
+                    WeaponId = 3,
+                    Damage = 20,
+                    Name = "Blaster Pistol"
+                });
         }
         public DbSet<Species> Species { get; set; }
 
